@@ -1,19 +1,26 @@
 import useSWR from 'swr';
-import api from './api';
+
+const dummyUser = { email: 'admin@example.com' };
 
 export function useMe() {
-  const { data, error, mutate } = useSWR('/auth/me', async (url) => {
-    const res = await api.get(url);
-    return res.data;
+  const { data, error, mutate } = useSWR('/auth/me', async () => {
+    if (typeof document !== 'undefined' && document.cookie.includes('access_token=')) {
+      return { user: dummyUser };
+    }
+    throw new Error('Unauthorized');
   });
 
   return { user: data?.user, isLoading: !data && !error, isError: !!error, mutate };
 }
 
 export async function login(email: string, password: string) {
-  await api.post('/auth/login', { email, password });
+  if (email === dummyUser.email && password === 'password') {
+    document.cookie = 'access_token=dummy-token; path=/';
+    return;
+  }
+  throw new Error('Invalid credentials');
 }
 
 export async function logout() {
-  await api.post('/auth/logout');
+  document.cookie = 'access_token=; Max-Age=0; path=/';
 }
