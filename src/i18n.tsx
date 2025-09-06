@@ -1,16 +1,17 @@
 'use client';
-import {createContext, ReactNode, useContext, useState} from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
+import { locales, defaultLocale, type Locale } from './i18n-config';
 
 type Messages = Record<string, string>;
 
 interface I18nContextValue {
-  locale: string;
+  locale: Locale;
   t: (key: string) => string;
-  setLocale: (locale: string) => Promise<void>;
+  setLocale: (locale: Locale) => Promise<void>;
 }
 
 const I18nContext = createContext<I18nContextValue>({
-  locale: 'en',
+  locale: defaultLocale,
   t: (key) => key,
   setLocale: async () => {}
 });
@@ -21,13 +22,13 @@ export function I18nProvider({
   initialMessages
 }: {
   children: ReactNode;
-  initialLocale: string;
+  initialLocale: Locale;
   initialMessages: Messages;
 }) {
-  const [locale, setLocaleState] = useState(initialLocale);
+  const [locale, setLocaleState] = useState<Locale>(initialLocale);
   const [messages, setMessages] = useState<Messages>(initialMessages);
 
-  const setLocale = async (nextLocale: string) => {
+  const setLocale = async (nextLocale: Locale) => {
     if (nextLocale === locale) return;
     const mod = await import(`@/messages/${nextLocale}.json`);
     setLocaleState(nextLocale);
@@ -48,6 +49,5 @@ export function useI18n() {
   return useContext(I18nContext);
 }
 
-export const locales = ['en', 'es'] as const;
-export type Locale = (typeof locales)[number];
-export const defaultLocale: Locale = 'en';
+export { locales, defaultLocale };
+export type { Locale };
