@@ -41,31 +41,45 @@ export default function LoginPage() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-slate-600 mb-1">Email</label>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="space-y-2">
+            <label htmlFor="email" className="block text-sm font-medium text-slate-600">
+              Email
+            </label>
             <input
+              id="email"
               type="email"
+              autoComplete="email"
               placeholder="you@example.com"
               {...register('email')}
               className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
             />
-            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+            )}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-600 mb-1">Password</label>
+          <div className="space-y-2">
+            <label htmlFor="password" className="block text-sm font-medium text-slate-600">
+              Password
+            </label>
             <input
+              id="password"
               type="password"
+              autoComplete="current-password"
               placeholder="••••••••"
               {...register('password')}
               className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
             />
-            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+            )}
           </div>
 
           {/* Error */}
-          {error && <p className="text-red-600 text-sm text-center font-medium bg-red-50 py-2 rounded-lg">{error}</p>}
+          {error && (
+            <p className="text-red-600 text-sm text-center font-medium bg-red-50 py-2 rounded-lg">{error}</p>
+          )}
 
           {/* Submit Button */}
           <button
