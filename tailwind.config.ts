@@ -1,3 +1,4 @@
+// tailwind.config.ts
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -6,36 +7,22 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // warm vivid orange like the shot
         brand: {
-          DEFAULT: '#6366f1', // Indigo-500
-          light: '#818cf8',   // Indigo-400
-          dark: '#4f46e5',    // Indigo-600
+          50:  '#fff4ec',
+          100: '#ffe6d6',
+          200: '#ffc3a3',
+          300: '#ffa06f',
+          400: '#ff7d3c',
+          500: '#ff641e',
+          600: '#ff5a1f', // primary
+          700: '#e04912',
+          800: '#b7380d',
+          900: '#8f2b0a',
         },
-        accent: {
-          DEFAULT: '#ec4899', // Pink-500
-          light: '#f472b6',   // Pink-400
-          dark: '#db2777',    // Pink-600
-        },
-        neutral: {
-          DEFAULT: '#1e293b', // Slate-800
-          light: '#64748b',   // Slate-500
-          dark: '#0f172a',    // Slate-900
-        },
-        success: {
-          DEFAULT: '#10b981', // Emerald-500
-          light: '#34d399',
-          dark: '#059669',
-        },
-        warning: {
-          DEFAULT: '#f59e0b', // Amber-500
-          light: '#fbbf24',
-          dark: '#d97706',
-        },
-        error: {
-          DEFAULT: '#ef4444', // Red-500
-          light: '#f87171',
-          dark: '#dc2626',
-        },
+      },
+      borderRadius: {
+        '2xl': '1.25rem',
       },
     },
   },
