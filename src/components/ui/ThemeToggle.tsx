@@ -1,41 +1,37 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
+import { IconMoon, IconSun } from '@/components/ui/Icons';
 
 export default function ThemeToggle() {
-  const [isDark, setIsDark] = useState(false);
+  const [dark, setDark] = useState(false);
 
   useEffect(() => {
-    const stored = window.localStorage.getItem('theme');
-    if (stored === 'light') {
-      document.documentElement.classList.remove('dark');
-      setIsDark(false);
-    } else {
+    if (typeof window === 'undefined') return;
+    const stored = localStorage.getItem('theme');
+    if (stored === 'dark') {
       document.documentElement.classList.add('dark');
-      setIsDark(true);
+      setDark(true);
     }
   }, []);
 
-  const toggle = () => {
-    const html = document.documentElement;
-    if (isDark) {
-      html.classList.remove('dark');
-      window.localStorage.setItem('theme', 'light');
-      setIsDark(false);
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
     } else {
-      html.classList.add('dark');
-      window.localStorage.setItem('theme', 'dark');
-      setIsDark(true);
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
     }
-  };
+  }, [dark]);
 
   return (
     <button
-      onClick={toggle}
+      onClick={() => setDark(!dark)}
+      className="text-slate-600 dark:text-slate-300"
       aria-label="Toggle theme"
-      className="text-slate-400 hover:text-slate-200 dark:text-slate-400 dark:hover:text-white"
     >
-      {isDark ? '🌙' : '☀️'}
+      {dark ? <IconMoon className="h-5 w-5" /> : <IconSun className="h-5 w-5" />}
     </button>
   );
 }
