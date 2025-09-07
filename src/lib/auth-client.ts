@@ -14,7 +14,7 @@ export function useMe() {
 }
 
 export async function login(email: string, password: string) {
-  if (email === dummyUser.email && password === 'password') {
+  if (email === dummyUser.email && password === 'admin123') {
     document.cookie = 'access_token=dummy-token; path=/';
     return;
   }
