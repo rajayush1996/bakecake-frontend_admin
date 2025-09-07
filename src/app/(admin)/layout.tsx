@@ -5,6 +5,7 @@ import { ReactNode, useState } from 'react';
 import { useI18n } from '@/i18n';
 import LocaleSwitcher from '@/components/ui/LocaleSwitcher';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+
 import Notifications from '@/components/ui/Notifications';
 import {
   IconChevronLeft,
