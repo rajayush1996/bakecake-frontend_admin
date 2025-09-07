@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { listPriceSegments, PriceEntry } from "@/lib/priceSegments";
 import { createProductListing } from "@/lib/productListing";
@@ -18,7 +18,8 @@ export default function NewProductPage() {
   });
   const [errors, setErrors] = useState<string[]>([]);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     let customPriceTable: PriceEntry[] | undefined;
     if (form.segmentId === "custom") {
       try {
@@ -46,57 +47,82 @@ export default function NewProductPage() {
   return (
     <main className="p-4">
       <h1 className="mb-4 text-2xl font-bold">New Product</h1>
-      <div className="mb-2">
-        <input
-          className="w-full border p-1"
-          placeholder="Title"
-          value={form.title}
-          onChange={(e) => setForm({ ...form, title: e.target.value })}
-        />
-      </div>
-      <div className="mb-2">
-        <textarea
-          className="w-full border p-1"
-          placeholder="Highlights (one per line)"
-          value={form.highlights}
-          onChange={(e) => setForm({ ...form, highlights: e.target.value })}
-        />
-      </div>
-      <div className="mb-2">
-        <label className="mr-2 font-semibold">Price Segment</label>
-        <select
-          className="border p-1"
-          value={form.segmentId}
-          onChange={(e) => setForm({ ...form, segmentId: e.target.value })}
-        >
-          {segments.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.label}
-            </option>
-          ))}
-          <option value="custom">Custom</option>
-        </select>
-      </div>
-      {form.segmentId === "custom" && (
-        <div className="mb-2">
-          <textarea
+      <form onSubmit={handleSubmit} className="space-y-2">
+        <div>
+          <label htmlFor="title" className="mb-1 block text-sm font-medium">
+            Title
+          </label>
+          <input
+            id="title"
             className="w-full border p-1"
-            placeholder='Price table JSON e.g. [{"weight":"500 g","price":500}]'
-            value={form.priceTable}
-            onChange={(e) => setForm({ ...form, priceTable: e.target.value })}
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            required
           />
         </div>
-      )}
-      {errors.length > 0 && (
-        <ul className="mb-2 list-disc pl-5 text-red-600">
-          {errors.map((e) => (
-            <li key={e}>{e}</li>
-          ))}
-        </ul>
-      )}
-      <button className="border px-2" onClick={handleSubmit}>
-        Save
-      </button>
+        <div>
+          <label
+            htmlFor="highlights"
+            className="mb-1 block text-sm font-medium"
+          >
+            Highlights (one per line)
+          </label>
+          <textarea
+            id="highlights"
+            className="w-full border p-1"
+            value={form.highlights}
+            onChange={(e) => setForm({ ...form, highlights: e.target.value })}
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="segment"
+            className="mb-1 block text-sm font-medium"
+          >
+            Price Segment
+          </label>
+          <select
+            id="segment"
+            className="border p-1"
+            value={form.segmentId}
+            onChange={(e) => setForm({ ...form, segmentId: e.target.value })}
+          >
+            {segments.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.label}
+              </option>
+            ))}
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        {form.segmentId === "custom" && (
+          <div>
+            <label
+              htmlFor="priceTable"
+              className="mb-1 block text-sm font-medium"
+            >
+              Price Table JSON
+            </label>
+            <textarea
+              id="priceTable"
+              className="w-full border p-1"
+              placeholder='e.g. [{"weight":"500 g","price":500}]'
+              value={form.priceTable}
+              onChange={(e) => setForm({ ...form, priceTable: e.target.value })}
+            />
+          </div>
+        )}
+        {errors.length > 0 && (
+          <ul className="list-disc pl-5 text-red-600">
+            {errors.map((e) => (
+              <li key={e}>{e}</li>
+            ))}
+          </ul>
+        )}
+        <button type="submit" className="border px-2">
+          Save
+        </button>
+      </form>
     </main>
   );
 }
