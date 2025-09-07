@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   PriceSegment,
   PriceEntry,
@@ -62,6 +63,12 @@ export default function PriceSegmentsPage() {
           Add
         </button>
       </section>
+      <Link
+        href="/admin/catalog/products"
+        className="mt-4 inline-block text-blue-600"
+      >
+        Back to Products
+      </Link>
     </main>
   );
 }
