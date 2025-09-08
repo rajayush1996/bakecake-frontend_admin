@@ -3,17 +3,18 @@ import { useI18n, locales } from '@/i18n';
 
 export default function LocaleSwitcher() {
   const { locale, setLocale } = useI18n();
+
   return (
-    <div className="flex gap-2 text-sm">
-      {locales.map((l) => (
-        <button
-          key={l}
-          onClick={() => setLocale(l)}
-          className={l === locale ? 'font-bold underline' : 'hover:underline'}
-        >
+    <select
+      value={locale}
+      onChange={e => setLocale(e.target.value as (typeof locales)[number])}
+      className="w-full bg-transparent text-sm"
+    >
+      {locales.map(l => (
+        <option key={l} value={l}>
           {l.toUpperCase()}
-        </button>
+        </option>
       ))}
-    </div>
+    </select>
   );
 }
