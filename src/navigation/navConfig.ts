@@ -11,7 +11,10 @@ export type NavItem = {
 };
 
 export const navConfig: NavItem[] = [
-  { key: 'section-studio', section: 'BakeCake Studio' },
+  {
+    key: 'section-studio', section: 'BakeCake Studio',
+    label: ""
+  },
   {
     key: 'dashboard',
     label: 'Dashboard',
