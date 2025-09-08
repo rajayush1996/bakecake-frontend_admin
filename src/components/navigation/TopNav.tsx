@@ -4,16 +4,19 @@ import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 import { navConfig, NavItem, Role } from '@/navigation/navConfig';
 import { useRole } from '@/contexts/role';
+import { NavIcon } from './NavIcon';
 
 function TopNavItem({ item, role, pathname }: { item: NavItem; role: Role; pathname: string }) {
   if (item.section) return null;
   const hasChildren = item.children && item.children.length > 0;
   const allowedChildren = item.children?.filter(child => !child.roles || child.roles.includes(role));
+  const Icon = item.icon ? <NavIcon name={item.icon} className="h-4 w-4" /> : null;
 
   if (hasChildren && allowedChildren && allowedChildren.length > 0) {
     return (
       <div key={item.key} className="relative group">
-        <button className="px-2 py-1 text-sm font-medium">
+        <button className="flex items-center gap-1 px-2 py-1 text-sm font-medium">
+          {Icon}
           {item.label}
         </button>
         <div className="absolute left-0 mt-1 hidden w-40 flex-col rounded border border-slate-200 bg-white shadow-md group-hover:flex dark:border-slate-700 dark:bg-slate-800">
@@ -39,8 +42,9 @@ function TopNavItem({ item, role, pathname }: { item: NavItem; role: Role; pathn
       <Link
         key={item.key}
         href={item.href}
-        className={`px-2 py-1 text-sm ${active ? 'font-semibold' : ''}`}
+        className={`flex items-center gap-1 px-2 py-1 text-sm ${active ? 'font-semibold' : ''}`}
       >
+        {Icon}
         {item.label}
       </Link>
     );

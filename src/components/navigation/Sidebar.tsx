@@ -5,11 +5,13 @@ import { usePathname } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { navConfig, NavItem, Role } from '@/navigation/navConfig';
 import { useRole } from '@/contexts/role';
+import { NavIcon } from './NavIcon';
 
 function NavItemComponent({ item, role, open, toggle, pathname }: { item: NavItem; role: Role; open: Record<string, boolean>; toggle: (key: string) => void; pathname: string }) {
   const active = item.href && pathname.startsWith(item.href);
   const hasChildren = item.children && item.children.length > 0;
   const allowedChildren = item.children?.filter(child => !child.roles || child.roles.includes(role));
+  const Icon = item.icon ? <NavIcon name={item.icon} className="h-4 w-4" /> : null;
 
   if (item.section) {
     return (
@@ -26,7 +28,7 @@ function NavItemComponent({ item, role, open, toggle, pathname }: { item: NavIte
           className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-left"
           onClick={() => toggle(item.key)}
         >
-          <span>{item.label}</span>
+          <span className="flex items-center gap-2">{Icon}{item.label}</span>
           <span>{open[item.key] ? '-' : '+'}</span>
         </button>
         {open[item.key] && (
@@ -45,9 +47,10 @@ function NavItemComponent({ item, role, open, toggle, pathname }: { item: NavIte
       <Link
         key={item.key}
         href={item.href}
-        className={`block px-3 py-2 text-sm ${active ? 'font-semibold' : ''}`}
+        className={`flex items-center px-3 py-2 text-sm ${active ? 'font-semibold' : ''}`}
       >
-        {item.label}
+        {Icon && <span className="mr-2">{Icon}</span>}
+        <span>{item.label}</span>
       </Link>
     );
   }
