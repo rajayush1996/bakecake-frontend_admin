@@ -2,13 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom globals */
-:root {
-  color-scheme: light dark;
+/* Your global theme (already fine) */
+:root { color-scheme: light dark; }
+html, body { height: 100%; }
+body { @apply bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100; }
+
+/* ---------- Form system ---------- */
+@layer components {
+  .field-label {
+    @apply mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300;
+  }
+  .input {
+    @apply w-full rounded-lg border
+      border-gray-300 dark:border-gray-700
+      bg-white dark:bg-slate-800
+      px-3 py-2 text-slate-900 dark:text-slate-100
+      placeholder-gray-400 dark:placeholder-gray-500
+      focus:outline-none focus:border-brand-500
+      focus:ring-2 focus:ring-brand-200 dark:focus:ring-brand-600;
+  }
+  .textarea { @apply input; }
+  .select  { @apply input pr-8; }
+
+  .card {
+    @apply rounded-lg border border-gray-200 dark:border-gray-700
+      bg-white dark:bg-slate-800 p-4 shadow-sm;
+  }
+  .card-title {
+    @apply text-lg font-semibold text-slate-800 dark:text-slate-100 mb-3;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg
+      bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-lg
+      border border-gray-300 dark:border-gray-600
+      bg-transparent px-3 py-2 text-slate-700 dark:text-slate-200
+      hover:bg-gray-100 dark:hover:bg-slate-800/60;
+  }
+
+  /* Pretty dropzone */
+  .dropzone {
+    @apply flex h-36 w-full cursor-pointer items-center justify-center
+      rounded-lg border-2 border-dashed
+      border-gray-300 dark:border-gray-700
+      bg-white dark:bg-slate-800
+      text-sm text-slate-500 dark:text-slate-400
+      transition-colors;
+  }
+  .dropzone:hover { @apply border-brand-500 bg-brand-50/50 dark:bg-brand-600/10; }
 }
-html, body {
-  height: 100%;
+
+/* Fix browser autofill making inputs dark/green */
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: #0f172a;
+  transition: background-color 9999s ease-in-out 0s;
 }
-body {
-  @apply bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100;
+:root.dark input:-webkit-autofill,
+:root.dark textarea:-webkit-autofill,
+:root.dark select:-webkit-autofill {
+  -webkit-text-fill-color: #e2e8f0;
 }

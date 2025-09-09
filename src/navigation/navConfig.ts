@@ -18,7 +18,7 @@ export const navConfig: NavItem[] = [
   {
     key: 'dashboard',
     label: 'Dashboard',
-    href: '/admin',
+    href: '/dashboard',
     icon: 'gauge',
     roles: ['SUPER_ADMIN', 'CATALOG_MANAGER', 'VENDOR_OPS', 'SUPPORT'],
   },
@@ -32,13 +32,15 @@ export const navConfig: NavItem[] = [
         key: 'products',
         label: 'Products',
         children: [
-          { key: 'products-create', label: 'Create', href: '/admin/catalog/products/create' },
-          { key: 'products-list', label: 'List', href: '/admin/catalog/products' },
+          // Matches app route: src/app/(admin)/catalog/products/new/page.tsx
+          { key: 'products-create', label: 'Create', href: '/catalog/products/new' },
+          { key: 'products-list', label: 'List', href: '/catalog/products' },
         ],
       },
-      { key: 'categories', label: 'Categories', href: '/admin/catalog/categories' },
-      { key: 'options', label: 'Option Libraries', href: '/admin/catalog/options' },
-      { key: 'addons', label: 'Add-ons', href: '/admin/catalog/addons' },
+      { key: 'categories', label: 'Categories', href: '/catalog/categories' },
+      // These sections are planned; routes not yet implemented
+      // { key: 'options', label: 'Option Libraries', href: '/catalog/options' },
+      // { key: 'addons', label: 'Add-ons', href: '/catalog/addons' },
     ],
   },
   {
@@ -47,9 +49,10 @@ export const navConfig: NavItem[] = [
     icon: 'tags',
     roles: ['SUPER_ADMIN', 'CATALOG_MANAGER'],
     children: [
-      { key: 'tiers', label: 'Price Tiers', href: '/admin/pricing/tiers' },
-      { key: 'promotions', label: 'Promotions', href: '/admin/pricing/promotions' },
-      { key: 'collections', label: 'Collections & Banners', href: '/admin/marketing/collections' },
+      // Matches app route: src/app/(admin)/catalog/price-segments/page.tsx
+      { key: 'tiers', label: 'Price Segments', href: '/catalog/price-segments' },
+      { key: 'promotions', label: 'Promotions', href: '/pricing/promotions' },
+      { key: 'collections', label: 'Collections & Banners', href: '/marketing/collections' },
     ],
   },
   {
@@ -58,10 +61,10 @@ export const navConfig: NavItem[] = [
     icon: 'store',
     roles: ['SUPER_ADMIN', 'VENDOR_OPS'],
     children: [
-      { key: 'vendor-profiles', label: 'Vendor Profiles', href: '/admin/vendors' },
-      { key: 'sku-mapping', label: 'SKU Mapping', href: '/admin/vendors/mapping' },
-      { key: 'zones', label: 'Zones & Pincodes', href: '/admin/vendors/zones' },
-      { key: 'slots', label: 'Slot Schedules', href: '/admin/vendors/slots' },
+      { key: 'vendor-profiles', label: 'Vendor Profiles', href: '/vendors' },
+      { key: 'sku-mapping', label: 'SKU Mapping', href: '/vendors/mapping' },
+      { key: 'zones', label: 'Zones & Pincodes', href: '/vendors/zones' },
+      { key: 'slots', label: 'Slot Schedules', href: '/vendors/slots' },
     ],
   },
   {
@@ -70,8 +73,8 @@ export const navConfig: NavItem[] = [
     icon: 'list',
     roles: ['SUPER_ADMIN', 'VENDOR_OPS', 'SUPPORT'],
     children: [
-      { key: 'orders-list', label: 'List', href: '/admin/orders' },
-      { key: 'refunds', label: 'Refunds & Credits', href: '/admin/orders/refunds' },
+      { key: 'orders-list', label: 'List', href: '/orders' },
+      { key: 'refunds', label: 'Refunds & Credits', href: '/orders/refunds' },
     ],
   },
   {
@@ -80,8 +83,8 @@ export const navConfig: NavItem[] = [
     icon: 'truck',
     roles: ['SUPER_ADMIN', 'VENDOR_OPS'],
     children: [
-      { key: 'shipments', label: 'Shipments', href: '/admin/delivery/shipments' },
-      { key: 'riders', label: 'Fallback Riders', href: '/admin/delivery/riders' },
+      { key: 'shipments', label: 'Shipments', href: '/delivery/shipments' },
+      { key: 'riders', label: 'Fallback Riders', href: '/delivery/riders' },
     ],
   },
   {
@@ -90,9 +93,9 @@ export const navConfig: NavItem[] = [
     icon: 'shield',
     roles: ['SUPER_ADMIN', 'VENDOR_OPS'],
     children: [
-      { key: 'audits', label: 'Photo Audits', href: '/admin/qa/audits' },
-      { key: 'sops', label: 'SOPs', href: '/admin/qa/sops' },
-      { key: 'defects', label: 'Defects & RCA', href: '/admin/qa/defects' },
+      { key: 'audits', label: 'Photo Audits', href: '/qa/audits' },
+      { key: 'sops', label: 'SOPs', href: '/qa/sops' },
+      { key: 'defects', label: 'Defects & RCA', href: '/qa/defects' },
     ],
   },
   {
@@ -101,8 +104,8 @@ export const navConfig: NavItem[] = [
     icon: 'message',
     roles: ['SUPER_ADMIN'],
     children: [
-      { key: 'wa-templates', label: 'WhatsApp Templates', href: '/admin/comms/templates' },
-      { key: 'campaigns', label: 'Campaigns', href: '/admin/comms/campaigns' },
+      { key: 'wa-templates', label: 'WhatsApp Templates', href: '/comms/templates' },
+      { key: 'campaigns', label: 'Campaigns', href: '/comms/campaigns' },
     ],
   },
   {
@@ -111,9 +114,9 @@ export const navConfig: NavItem[] = [
     icon: 'chart',
     roles: ['SUPER_ADMIN'],
     children: [
-      { key: 'sales', label: 'Sales & Conversion', href: '/admin/reports/sales' },
-      { key: 'vendor-perf', label: 'Vendor Performance', href: '/admin/reports/vendors' },
-      { key: 'promo-perf', label: 'Promotions Performance', href: '/admin/reports/promotions' },
+      { key: 'sales', label: 'Sales & Conversion', href: '/reports/sales' },
+      { key: 'vendor-perf', label: 'Vendor Performance', href: '/reports/vendors' },
+      { key: 'promo-perf', label: 'Promotions Performance', href: '/reports/promotions' },
     ],
   },
   {
@@ -121,21 +124,20 @@ export const navConfig: NavItem[] = [
     label: 'Users & Roles',
     icon: 'users',
     roles: ['SUPER_ADMIN'],
-    href: '/admin/users',
+    href: '/users',
   },
   {
     key: 'settings',
     label: 'Settings',
     icon: 'cog',
     roles: ['SUPER_ADMIN'],
-    href: '/admin/settings',
+    href: '/settings',
   },
   {
     key: 'audit',
     label: 'Audit Log',
     icon: 'clock',
     roles: ['SUPER_ADMIN'],
-    href: '/admin/audit',
+    href: '/audit',
   },
 ];
-

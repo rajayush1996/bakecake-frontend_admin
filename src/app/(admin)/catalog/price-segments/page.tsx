@@ -104,7 +104,7 @@ export default function PriceSegmentsPage() {
         </form>
       </section>
       <Link
-        href="/admin/catalog/products"
+        href="/catalog/products"
         className="mt-4 inline-block text-blue-600"
       >
         Back to Products

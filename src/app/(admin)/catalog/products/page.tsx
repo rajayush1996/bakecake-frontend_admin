@@ -19,7 +19,7 @@ export default function ProductsPage() {
         ))}
       </ul>
       <Link
-        href="/admin/catalog/price-segments"
+        href="/catalog/price-segments"
         className="mt-4 inline-block text-blue-600"
       >
         Manage Price Segments
