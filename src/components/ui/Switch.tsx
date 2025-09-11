@@ -7,7 +7,15 @@ export function Switch(props: SwitchProps) {
   return (
     <label className="inline-flex items-center cursor-pointer">
       <input type="checkbox" className="sr-only peer" {...props} />
-      <div className="w-10 h-6 bg-slate-200 rounded-full peer-checked:bg-slate-900 relative after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:h-4 after:w-4 after:rounded-full after:transition-all peer-checked:after:translate-x-4" />
+      <div
+        className="relative h-6 w-10 rounded-full
+                   bg-slate-200 dark:bg-slate-700
+                   transition-colors
+                   peer-checked:bg-brand-600 dark:peer-checked:bg-brand-500
+                   after:absolute after:left-1 after:top-1 after:h-4 after:w-4 after:rounded-full
+                   after:bg-white dark:after:bg-white/90
+                   after:transition-transform peer-checked:after:translate-x-4"
+      />
     </label>
   );
 }

@@ -1,6 +1,6 @@
-import { PriceEntry, getPriceSegment } from "./priceSegments";
+import { PriceEntry, getPriceSegment, getEffectivePriceTable } from "./priceSegments";
 
-export type ProductType = "cake" | "flowers";
+export type ProductType = "cake" | "flowers" | "teddy" | "gift";
 export type ProductAttributes = Record<string, string>;
 
 export interface ProductListing {
@@ -69,21 +69,13 @@ export function createProductListing(input: ProductListingInput): ProductListing
   const segment = getPriceSegment(input.priceSegmentId);
   return {
     ...base,
-    priceTable: segment ? segment.priceTable : [],
+    priceTable: segment
+      ? getEffectivePriceTable(input.priceSegmentId, {
+          productType: input.productType,
+          categoryId: input.primaryCategoryId,
+        })
+      : [],
   };
 }
 
-export const classicButterscotchListing = createProductListing({
-  title: "Classic Butterscotch Crunch Cake",
-  description: "A crunchy butterscotch cake with praline shards.",
-  highlights: [
-    "Buttery crunch layered with silky whipped cream",
-    "Fresh vanilla sponge soaked in butterscotch syrup",
-    "Crowned with golden praline shards and nuts",
-    "Handcrafted daily for swift same-day delivery",
-  ],
-  priceSegmentId: "tier1",
-  productType: "cake",
-  attributes: { flavour: "Butterscotch" },
-  slug: "classic-butterscotch-crunch-cake",
-});
+// Example listings moved to mocks in: src/mocks/catalog/products.ts

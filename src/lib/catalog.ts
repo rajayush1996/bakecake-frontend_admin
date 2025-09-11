@@ -1,6 +1,7 @@
-import { ProductListing, classicButterscotchListing } from "./productListing";
+import type { ProductListing } from "./productListing";
+import { MOCK_PRODUCTS } from "@/mocks/catalog/products";
 
-const products: ProductListing[] = [classicButterscotchListing];
+const products: ProductListing[] = [...MOCK_PRODUCTS];
 
 export function listProducts(): ProductListing[] {
   return products;

@@ -4,6 +4,7 @@
 import { ReactNode } from 'react';
 import Sidebar from '@/components/navigation/Sidebar';
 import AdminHeader from '@/components/navigation/AdminHeader';
+import { CatalogProvider } from '@/features/catalog/state';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
@@ -17,9 +18,11 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         {/* Main area */}
         <div className="flex-1 min-w-0 flex flex-col">
           <AdminHeader />
-          <main className="flex-1 p-8">
-            <div className="mx-auto max-w-7xl">{children}</div>
-          </main>
+          <CatalogProvider>
+            <main className="flex-1 p-8">
+              <div className="mx-auto max-w-7xl">{children}</div>
+            </main>
+          </CatalogProvider>
         </div>
       </div>
     </div>

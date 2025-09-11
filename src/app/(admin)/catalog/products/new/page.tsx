@@ -4,131 +4,19 @@ import { useEffect, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { listPriceSegments, PriceEntry } from "@/lib/priceSegments";
 import { createProductListing, ProductType } from "@/lib/productListing";
+import { FIELD_SCHEMAS, type FieldDef } from "@/mocks/forms/productFields";
+import { CATEGORIES, findNode, findRootForId, flattenAllWithDepth, flattenDescendantsWithPath } from "@/features/catalog/categories";
 import { addProduct } from "@/lib/catalog";
 import { validateListing } from "@/lib/productListingValidator";
+import { PricePreview as SharedPricePreview } from "@/features/pricing/PricePreview";
 
 /* ---------------- Product fields by type (trimmed) ---------------- */
-
-type FieldDef = {
-  key: string;
-  label: string;
-  type: "text" | "select" | "textarea" | "number";
-  options?: string[];
-  required?: boolean;
-  defaultValue?: string;
-};
-
-const FIELD_SCHEMAS: Record<ProductType, FieldDef[]> = {
-  cake: [
-    { key: "flavour", label: "Cake Flavour", type: "text", required: true },
-    {
-      key: "shape",
-      label: "Shape",
-      type: "select",
-      options: ["Round", "Square", "Heart", "Rectangle", "Other"],
-      required: true,
-    },
-    { key: "toppings", label: "Toppings (optional)", type: "text" },
-    { key: "netQuantity", label: "Net Quantity", type: "text", defaultValue: "1 Cake" },
-  ],
-  flowers: [
-    {
-      key: "flowerType",
-      label: "Flower Type",
-      type: "select",
-      options: ["Roses", "Lilies", "Carnations", "Tulips", "Mixed", "Other"],
-      required: true,
-    },
-    {
-      key: "arrangement",
-      label: "Arrangement",
-      type: "select",
-      options: ["Bouquet", "Box", "Basket", "Bunch"],
-      required: true,
-    },
-    { key: "color", label: "Primary Color (optional)", type: "text" },
-    { key: "stemsCount", label: "Stems / Qty (optional)", type: "number" },
-    { key: "careNotes", label: "Care Instructions (optional)", type: "textarea" },
-  ],
-};
 
 const buildInitialAttributes = (type: ProductType) =>
   Object.fromEntries(FIELD_SCHEMAS[type].map((f) => [f.key, f.defaultValue ?? ""]));
 
 /* ---------------- Category tree + helpers ---------------- */
-type CategoryNode = {
-  id: string;
-  name: string;
-  productType?: ProductType; // only on roots
-  children?: CategoryNode[];
-};
-
-const CATEGORIES: CategoryNode[] = [
-  {
-    id: "cakes",
-    name: "Cakes",
-    productType: "cake",
-    children: [
-      {
-        id: "chocolate-cakes",
-        name: "Chocolate Cakes",
-        children: [
-          { id: "truffle-cakes", name: "Truffle Cakes" },
-          { id: "photo-cakes", name: "Photo Cakes" },
-        ],
-      },
-      { id: "designer-cakes", name: "Designer Cakes" },
-      { id: "eggless-cakes", name: "Eggless Cakes" },
-    ],
-  },
-  {
-    id: "flowers",
-    name: "Flowers",
-    productType: "flowers",
-    children: [
-      { id: "bouquets", name: "Bouquets" },
-      { id: "roses", name: "Roses" },
-      { id: "lilies", name: "Lilies" },
-    ],
-  },
-];
-
-const findNode = (nodes: CategoryNode[], id?: string): CategoryNode | undefined => {
-  if (!id) return undefined;
-  for (const n of nodes) {
-    if (n.id === id) return n;
-    const hit = n.children && findNode(n.children, id);
-    if (hit) return hit;
-  }
-};
-const findRootForId = (id?: string): CategoryNode | undefined => {
-  if (!id) return undefined;
-  const contains = (node: CategoryNode): boolean =>
-    node.id === id || (node.children?.some(contains) ?? false);
-  return CATEGORIES.find(contains);
-};
-const flattenDescendantsWithPath = (root?: CategoryNode): { id: string; label: string }[] => {
-  if (!root?.children) return [];
-  const out: { id: string; label: string }[] = [];
-  const walk = (n: CategoryNode, path: string[]) => {
-    const label = [...path, n.name].join(" › ");
-    out.push({ id: n.id, label });
-    n.children?.forEach((c) => walk(c, [...path, n.name]));
-  };
-  root.children.forEach((c) => walk(c, []));
-  return out;
-};
-const flattenAllWithDepth = (
-  nodes: CategoryNode[],
-  depth = 0
-): { id: string; name: string; depth: number }[] => {
-  const out: { id: string; name: string; depth: number }[] = [];
-  for (const n of nodes) {
-    out.push({ id: n.id, name: n.name, depth });
-    if (n.children) out.push(...flattenAllWithDepth(n.children, depth + 1));
-  }
-  return out;
-};
+// categories data + helpers are centralized in features/catalog/categories
 
 function CategorySection({
   mainId,
@@ -572,9 +460,15 @@ export default function NewProductPage() {
                 </div>
               )}
 
-              <PricePreview segmentId={form.segmentId} customRows={customRows} segments={segments} />
-            </div>
-          </section>
+              <SharedPricePreview
+                segmentId={form.segmentId}
+                customRows={customRows}
+                segments={segments}
+                productType={productType}
+                categoryId={form.primaryCategoryId}
+              />
+          </div>
+        </section>
 
           {/* Errors + Save */}
           {errors.length > 0 && (
@@ -653,30 +547,5 @@ export default function NewProductPage() {
   );
 }
 
-/* ---------------- Price Preview (simple & stable) ---------------- */
-function PricePreview({
-  segmentId,
-  customRows,
-  segments,
-}: {
-  segmentId: string;
-  customRows: PriceEntry[];
-  segments: ReturnType<typeof listPriceSegments>;
-}) {
-  const seg = segmentId !== "custom" ? segments.find((s) => s.id === segmentId) : undefined;
-  const table: PriceEntry[] = seg ? seg.priceTable : customRows;
-  if (!table.length) return null;
-
-  return (
-    <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-800 p-4">
-      <div className="mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Price Preview</div>
-      <div className="flex flex-wrap gap-2">
-        {table.map((p, i) => (
-          <span key={`${p.weight}-${i}`} className="rounded-full bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 text-sm text-indigo-700 dark:text-indigo-300">
-            {p.weight}: ₹{p.price}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
+// Removed local PricePreview in favor of shared component that
+// supports productType and category-specific overrides.

@@ -31,29 +31,8 @@ const LS_KEY = "bk_categories_v1";
 
 type CatStore = { seq: number; items: Category[] };
 
-const seed: CatStore = {
-  seq: 2,
-  items: [
-    {
-      id: 1,
-      title: "Cakes",
-      slug: "cakes",
-      isActive: true,
-      sortOrder: 1,
-      parentId: null,
-      productType: "cake",
-    },
-    {
-      id: 2,
-      title: "Flowers",
-      slug: "flowers",
-      isActive: true,
-      sortOrder: 2,
-      parentId: null,
-      productType: "flowers",
-    },
-  ],
-};
+import { CATEGORY_SEED } from "@/mocks/admin/categorySeed";
+const seed: CatStore = CATEGORY_SEED as CatStore;
 
 function loadStore(): CatStore {
   if (typeof window === "undefined") return structuredClone(seed);
